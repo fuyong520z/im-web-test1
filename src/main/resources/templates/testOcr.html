@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Insert title here</title>
+</head>
+<body>
+<div class="container">
+    <input type="file" name="file" style="display:none" id="fileInput">
+    <button type="button" class="btn btn-default" id="choice">选择图片</button>
+    <button type="submit" class="btn btn-default" id="submit">识别</button>
+    <table class="table table-bordered">
+        <tr>
+            <td>发票代码</td>
+            <td id="invoiceCode"></td>
+            <td>开票时间</td>
+            <td id="invoiceDate"></td>
+        </tr>
+        <tr>
+            <td>购方名称</td>
+            <td id="purchaserName"></td>
+            <td>购方纳税人识别号</td>
+            <td id="purchaserRegisterNum"></td>
+        </tr>
+        <tr>
+            <td>价税合计</td>
+            <td id="amountInFiguers"></td>
+        </tr>
+        <tr>
+            <td>售方名称</td>
+            <td id="sellerName"></td>
+            <td>售方纳税人识别号</td>
+            <td id="sellerRegisterNum"></td>
+        </tr>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script type="text/javascript">
+    $('#choice').click(function(){
+        $('#fileInput').click();
+    });
+    $('#submit').click(function(){
+        var formData = new FormData();
+        formData.append('file',$('#fileInput')[0].files[0]);
+        $.ajax({
+            url:'/im/invoice/getMsg',
+            type:'POST',
+            data:formData,
+            cache:false,
+            processData:false,
+            contentType:false,
+            success:function(result){
+                $('#invoiceCode').text(result.invoiceCode);
+                $('#invoiceDate').text(result.invoiceDate);
+                $('#purchaserName').text(result.purchaserName);
+                $('#purchaserRegisterNum').text(result.purchaserRegisterNum);
+                $('#amountInFiguers').text(result.amountInFiguers);
+                $('#sellerName').text(result.sellerName);
+                $('#sellerRegisterNum').text(result.sellerRegisterNum);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
